@@ -3,15 +3,19 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function UserProtectedRoute({ children }) {
-  const { login } = useSelector((state) => state.userState);
-
+  const { login, authLoaded } = useSelector((state) => state.userState);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (login) {
+    if (authLoaded && login) {
       navigate("/", { replace: true });
     }
-  }, [login]);
+  }, [login, authLoaded]);
+
+  if (!authLoaded) {
+    // Still verifying auth → show loading or nothing
+    return <div>Authentication...</div>; // or return null
+  }
 
   if (login) {
     return null;

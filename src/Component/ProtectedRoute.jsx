@@ -3,14 +3,19 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
-  const { login } = useSelector((state) => state.userState);
+  const { login, authLoaded } = useSelector((state) => state.userState);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!login) {
+    if (authLoaded && !login) {
       navigate("/login", { replace: true });
     }
-  }, [login]);
+  }, [login, authLoaded]);
+
+  // Wait for auth to load before deciding
+  if (!authLoaded) {
+    return <div>Loading...</div>; // or return null
+  }
 
   if (!login) {
     return null;
@@ -18,4 +23,5 @@ function ProtectedRoute({ children }) {
 
   return children;
 }
+
 export default ProtectedRoute;

@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 function Home() {
   return (
     <div className="container py-4">
